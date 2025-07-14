@@ -1,68 +1,93 @@
 import React, { useState, useMemo } from "react";
 import "./App.css";
 
-/* -------------------------------------------------------------------------- *
-| Theme Colors (as specified)
-*  Accent:   #FFA726 (Light Orange)
-*  Primary:  #FF7043 (Deep Orange)
-*  Secondary:#37474F (Blue-Gray)
-*  Used mainly via inline styles to override CSS variables as needed.
-*---------------------------------------------------------------------------*/
-
-// Simulated menu data (in a real app, fetch from API)
 const MENU_ITEMS = [
   {
     id: 1,
     name: "Classic Margherita Pizza",
     description: "Fresh basil, mozzarella & tomato sauce on thin crust.",
     price: 8.99,
+    image: null
   },
   {
     id: 2,
     name: "Spaghetti Carbonara",
     description: "Pasta, bacon, creamy egg sauce, cracked pepper.",
     price: 11.5,
+    image: null
   },
   {
     id: 3,
     name: "Caesar Salad",
     description: "Crisp romaine, parmesan, croutons, house caesar dressing.",
     price: 7.0,
+    image: null
   },
   {
     id: 4,
     name: "Grilled Salmon",
     description: "Salmon fillet, lemon dill butter, vegetables.",
     price: 15.2,
+    image: null
   },
   {
     id: 5,
     name: "Avocado Toast",
     description: "Multigrain bread, smashed avocado, radish, arugula.",
     price: 6.75,
+    image: null
   },
   {
     id: 6,
     name: "Lemonade",
     description: "Fresh squeezed lemon, classic or sparkling.",
     price: 2.5,
+    image: null
   },
 ];
 
+function IconMenu({ size = 18, color = "#fff" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 22 22">
+      <rect x="2" y="5" width="18" height="2.4" rx="1.1" fill={color} />
+      <rect x="2" y="10" width="18" height="2.4" rx="1.1" fill={color} />
+      <rect x="2" y="15" width="12" height="2.4" rx="1.1" fill={color} />
+    </svg>
+  );
+}
+
+function IconCart({ size = 18, color = "#fff" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 22 22">
+      <circle cx="8" cy="18" r="2" fill={color} />
+      <circle cx="16" cy="18" r="2" fill={color} />
+      <rect x="4.5" y="6" width="13" height="7" rx="2" fill="none" stroke={color} strokeWidth="2" />
+      <rect x="2.2" y="2.6" width="17.6" height="2.6" rx="1.2" fill={color} />
+    </svg>
+  );
+}
+
+function IconDish({ size = 44, color = "#516177" }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 44 44" fill="none">
+      <circle cx="22" cy="22" r="19" fill={color} fillOpacity=".13"/>
+      <ellipse cx="22" cy="28" rx="13" ry="5" stroke={color} strokeWidth="2" fill="none"/>
+      <circle cx="22" cy="18" r="8" fill={color} fillOpacity=".19"/>
+      <circle cx="22" cy="18" r="5.5" stroke={color} strokeWidth="2" fill="none"/>
+    </svg>
+  );
+}
+
 // PUBLIC_INTERFACE
 function App() {
-  // Cart: {id, name, price, qty}
   const [cart, setCart] = useState([]);
-  const [cartOpen, setCartOpen] = useState(false); // cart sidebar/modal
-  const [showSummary, setShowSummary] = useState(false); // order summary dialog
+  const [cartOpen, setCartOpen] = useState(false);
+  const [showSummary, setShowSummary] = useState(false);
   const [orderPlaced, setOrderPlaced] = useState(false);
 
-  // Theme: only light mode, but accent applied via CSS vars and inline.
   React.useEffect(() => {
-    document.documentElement.style.setProperty("--accent", "#FFA726");  // accent
-    document.documentElement.style.setProperty("--primary", "#FF7043"); // primary
-    document.documentElement.style.setProperty("--secondary", "#37474F");// secondary
-    document.documentElement.setAttribute("data-theme", "light");
+    // Set theme root vars for fallback
+    document.body.style.background = "var(--bg-dark)";
   }, []);
 
   // PUBLIC_INTERFACE
@@ -70,7 +95,6 @@ function App() {
     setCart((prev) => {
       const exists = prev.find((it) => it.id === item.id);
       if (exists) {
-        // Increase quantity
         return prev.map((it) =>
           it.id === item.id ? { ...it, qty: it.qty + 1 } : it
         );
@@ -103,10 +127,9 @@ function App() {
     setShowSummary(false);
     setOrderPlaced(true);
     setCart([]);
-    setTimeout(() => setOrderPlaced(false), 3000);
+    setTimeout(() => setOrderPlaced(false), 2800);
   };
 
-  // Order totals and summary
   const cartTotal = useMemo(
     () =>
       cart
@@ -115,151 +138,90 @@ function App() {
     [cart]
   );
 
-  // Resets when placing a new order
   const handleCheckout = () => {
     setShowSummary(true);
     setCartOpen(false);
   };
 
-  /* Main layout: AppBar, MenuGrid, CartSidebar/Modal, SummaryModal */
+  // Only one category for demonstration: Pizza (add your own categories as needed)
   return (
-    <div className="App" style={{
-      backgroundColor: "#fff",
-      color: "#222",
-      minHeight: "100vh"
-    }}>
-      {/* App Bar */}
-      <nav className="appbar"
-        style={{
-          background: "var(--primary)",
-          color: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          fontWeight: 600,
-          fontSize: 24,
-          padding: "0 32px",
-          height: 64,
-          boxShadow: "0 1px 8px 0 rgba(36,37,38,0.06)",
-          letterSpacing: "-1px"
-        }}
-      >
-        <span>
-          <span style={{ color: "var(--accent)" }}>☕</span> Kavia Restaurant
-        </span>
-        <button
-          className="cart-btn"
-          aria-label="Open cart"
-          style={{
-            background: "var(--secondary)",
-            color: "#fff",
-            border: 0,
-            borderRadius: 18,
-            fontWeight: 600,
-            fontSize: 16,
-            padding: "8px 18px",
-            cursor: "pointer",
-            boxShadow: "0 1px 3px rgba(36,37,38,0.06)",
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            outline: "none",
-          }}
-          onClick={() => setCartOpen((open) => !open)}
-        >
-          🛒 Cart
-          {cart.length > 0 && (
-            <span
-              style={{
-                background: "var(--accent)",
-                color: "#fff",
-                borderRadius: 14,
-                padding: "2px 8px",
-                marginLeft: 2,
-                fontSize: 14,
-                minWidth: 20,
-                display: "inline-block",
-              }}
-              aria-label="Number of items in cart"
-            >
-              {cart.reduce((a, b) => a + b.qty, 0)}
-            </span>
-          )}
-        </button>
+    <div className="App">
+      {/* Header */}
+      <nav className="appbar">
+        <div className="appbar__logo">
+          {/* Logo, optionally swapped for icon */}
+          <span role="img" aria-label="logo" style={{fontSize: 23, marginRight: 7}}>🍽️</span>
+          <span>Bistro Deluxe</span>
+        </div>
+        <div className="appbar__actions">
+          <button className="header-btn" style={{minWidth: 80}} aria-label="Main menu">
+            <IconMenu size={18} />
+            Menu
+          </button>
+          <button
+            className="header-btn"
+            style={{minWidth: 80, position: "relative"}}
+            aria-label="Open cart"
+            onClick={() => setCartOpen(true)}
+          >
+            <IconCart size={18} />
+            Cart
+            {cart.length > 0 && (
+              <span
+                style={{
+                  position: "absolute",
+                  top: -7,
+                  right: 9,
+                  background: "var(--bg-dark)",
+                  color: "var(--accent-orange)",
+                  border: "2px solid #fff",
+                  borderRadius: "50%",
+                  fontWeight: 700,
+                  fontSize: 12,
+                  minWidth: 22,
+                  height: 22,
+                  lineHeight: "18px",
+                  textAlign: "center",
+                  zIndex: 4,
+                  boxShadow: "0 1px 2px #2223"
+                }}
+                aria-label="Number of items in cart"
+              >
+                {cart.reduce((a, b) => a + b.qty, 0)}
+              </span>
+            )}
+          </button>
+        </div>
       </nav>
-      <main className="main-content" style={{ maxWidth: 900, margin: "0 auto", padding: "32px 8px 64px 8px" }}>
-        <h1 style={{
-          fontWeight: 700,
-          fontSize: 36,
-          margin: "24px 0 4px 0",
-          letterSpacing: "-2px",
-          color: "var(--secondary)"
-        }}>Menu</h1>
-        <p style={{ color: "#555", fontSize: 18, margin: "0 0 16px 0" }}>
-          Browse our menu and add items to your order.
-        </p>
+      {/* Main Section */}
+      <section className="main-section">
+        <header>
+          <h1 className="section-title">Our Menu</h1>
+          <div className="section-subtitle">
+            Discover our delicious selection of dishes
+          </div>
+        </header>
+        {/* If you want categories, add <div className="category-title">Pizza</div> */}
+        <div className="category-title" style={{marginTop: 34}}>Pizza</div>
         {/* Menu Grid */}
-        <section
-          className="menu-grid"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-            gap: "28px 20px",
-            margin: "14px 0 40px 0"
-          }}>
+        <section className="menu-grid" style={{marginTop: 6}}>
           {MENU_ITEMS.map((item) => (
             <article
               key={item.id}
               className="menu-item-card"
-              style={{
-                background: "#fff",
-                border: "1.5px solid #eee",
-                borderRadius: 18,
-                boxShadow: "0 2px 8px rgba(36,37,38,0.06)",
-                padding: "24px 22px 18px 22px",
-                textAlign: "left",
-                minWidth: 0,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between"
-              }}>
-              <header>
-                <h2 style={{
-                  fontSize: 20,
-                  fontWeight: 700,
-                  color: "var(--primary)",
-                  margin: "0 0 2px 0"
-                }}>{item.name}</h2>
-                <p style={{ fontSize: 14, color: "#757575", margin: "0 0 13px 0" }}>{item.description}</p>
-              </header>
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between"
-              }}>
-                <span style={{
-                  color: "var(--accent)",
-                  fontWeight: 600,
-                  fontSize: 17
-                }}>
-                  ${item.price.toFixed(2)}
-                </span>
+            >
+              <div className="menu-card-image">
+                {/* Placeholder icon for food */}
+                <IconDish />
+              </div>
+              <div className="menu-item-title">{item.name}</div>
+              <div className="menu-item-desc">{item.description}</div>
+              <div className="menu-card-bottom">
+                <span className="menu-price">${item.price.toFixed(2)}</span>
                 <button
-                  onClick={() => addToCart(item)}
                   className="add-btn"
                   aria-label={`Add ${item.name} to cart`}
-                  style={{
-                    background: "var(--primary)",
-                    color: "#fff",
-                    fontWeight: 600,
-                    fontSize: 15,
-                    border: "none",
-                    borderRadius: 18,
-                    padding: "7px 16px",
-                    boxShadow: "0 1px 4px rgba(255,167,38,0.13)",
-                    cursor: "pointer",
-                    outline: "none",
-                  }}
+                  onClick={() => addToCart(item)}
                 >
                   + Add
                 </button>
@@ -267,8 +229,8 @@ function App() {
             </article>
           ))}
         </section>
-      </main>
-      {/* Cart Sidebar Modal */}
+      </section>
+      {/* Cart Sidebar */}
       <CartSidebar
         open={cartOpen}
         onClose={() => setCartOpen(false)}
@@ -278,7 +240,6 @@ function App() {
         removeFromCart={removeFromCart}
         onCheckout={handleCheckout}
       />
-      {/* Order Summary Modal */}
       {showSummary && (
         <OrderSummaryModal
           cart={cart}
@@ -287,7 +248,7 @@ function App() {
           onClose={() => setShowSummary(false)}
         />
       )}
-      {/* Snackbar order placed notification */}
+      {/* Snackbar */}
       <div
         aria-live="polite"
         role="status"
@@ -296,17 +257,17 @@ function App() {
           left: 0,
           right: 0,
           bottom: 36,
-          zIndex: 1201,
+          zIndex: 1511,
           display: "flex",
           justifyContent: "center",
-          pointerEvents: "none"
+          pointerEvents: "none",
         }}>
         {orderPlaced && (
           <div style={{
-            background: "var(--accent)",
+            background: "var(--accent-orange)",
             color: "#fff",
-            padding: "18px 36px",
-            borderRadius: 18,
+            padding: "15px 30px",
+            borderRadius: 14,
             fontSize: 20,
             fontWeight: 700,
             boxShadow: "0 4px 15px 0 rgba(255,167,38,0.09)"
@@ -315,31 +276,15 @@ function App() {
           </div>
         )}
       </div>
-      <footer style={{
-        textAlign: "center",
-        color: "#c1a77e",
-        fontSize: 15,
-        padding: "36px 0 10px 0",
-        background: "#fff"
-      }}>
-        Kavia Billing &middot; Modern React Demo
+      <footer>
+        Bistro Deluxe &middot; Modern Restaurant Demo
       </footer>
     </div>
   );
 }
 
-
-// Cart Sidebar/Modal (for mobile <600px width, modal; desktop, right sidebar)
-function CartSidebar({
-  open,
-  onClose,
-  cart,
-  total,
-  updateQty,
-  removeFromCart,
-  onCheckout,
-}) {
-  // Responsive: Render modal on small screens, sidebar otherwise
+// Cart Sidebar/Modal
+function CartSidebar({ open, onClose, cart, total, updateQty, removeFromCart, onCheckout }) {
   const [mobile, setMobile] = React.useState(window.innerWidth < 600);
 
   React.useEffect(() => {
@@ -359,32 +304,28 @@ function CartSidebar({
         right: 0,
         width: mobile ? "100vw" : 370,
         height: "100vh",
-        background: "#fff",
-        boxShadow: mobile
-          ? "0 6px 22px 0 rgba(55,71,79,0.09)"
-          : "-7px 0 26px 0 rgba(255,112,67,0.11)",
-        zIndex: 1105,
+        zIndex: 1405,
         transition: "right 0.3s",
-        borderLeft: "3px solid var(--primary)",
         display: "flex",
         flexDirection: "column",
         animation: "cartslidein 0.27s cubic-bezier(.47,1.64,.41,.8)",
-        maxWidth: "100vw"
+        maxWidth: "100vw",
       }}
     >
       <header style={{
-        padding: "18px 24px 10px 26px",
-        borderBottom: "1.7px solid #f1ede1",
+        padding: "20px 28px 8px 28px",
+        borderBottom: "1.7px solid #2f3950",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between"
       }}>
         <span style={{
-          color: "var(--primary)",
           fontWeight: 800,
           fontSize: 22,
+          color: "var(--primary-text)"
         }}>
-          <span role="img" aria-label="cart">🛒</span> Your Cart
+          <span role="img" aria-label="cart" style={{marginRight: 6}}>🛒</span>
+          Your Cart
         </span>
         <button
           onClick={onClose}
@@ -392,8 +333,8 @@ function CartSidebar({
           style={{
             background: "none",
             border: "none",
-            color: "var(--primary)",
-            fontWeight: 600,
+            color: "var(--accent-orange)",
+            fontWeight: 700,
             fontSize: 28,
             cursor: "pointer",
             padding: 0,
@@ -406,7 +347,7 @@ function CartSidebar({
           padding: "20px 24px 10px 22px"
         }}>
         {cart.length === 0 ? (
-          <div style={{ color: "#bbb", textAlign: "center", marginTop: 60 }}>
+          <div style={{ color: "#6b7d99", textAlign: "center", marginTop: 60 }}>
             <span style={{ fontSize: 48, display: "block", marginBottom: 8 }}>🛍️</span>
             Cart is empty. Add something delicious!
           </div>
@@ -417,7 +358,7 @@ function CartSidebar({
                 key={item.id}
                 style={{
                   marginBottom: "22px",
-                  borderBottom: "1px solid #f5e8df",
+                  borderBottom: "1px solid #304060",
                   paddingBottom: 7,
                   display: "flex",
                   alignItems: "center",
@@ -429,7 +370,7 @@ function CartSidebar({
                   flexDirection: "column"
                 }}>
                   <div style={{ fontWeight: 650, fontSize: 16 }}>{item.name}</div>
-                  <div style={{ color: "#777", fontSize: 13 }}>{item.qty} × ${item.price.toFixed(2)}</div>
+                  <div style={{ color: "#9eb0d1", fontSize: 13 }}>{item.qty} × ${item.price.toFixed(2)}</div>
                 </div>
                 <div style={{
                   display: "flex",
@@ -438,7 +379,7 @@ function CartSidebar({
                 }}>
                   <button
                     style={{
-                      background: "var(--accent)",
+                      background: "var(--accent-orange)",
                       color: "#fff",
                       fontWeight: 600,
                       border: "none",
@@ -456,7 +397,7 @@ function CartSidebar({
                   >−</button>
                   <button
                     style={{
-                      background: "var(--accent)",
+                      background: "var(--accent-orange)",
                       color: "#fff",
                       fontWeight: 600,
                       border: "none",
@@ -477,8 +418,8 @@ function CartSidebar({
                   style={{
                     marginLeft: 14,
                     background: "none",
-                    color: "var(--primary)",
-                    fontWeight: 600,
+                    color: "var(--accent-orange)",
+                    fontWeight: 700,
                     fontSize: 20,
                     border: "none",
                     cursor: "pointer"
@@ -493,7 +434,7 @@ function CartSidebar({
       </div>
       <footer style={{
         padding: "18px 28px",
-        borderTop: "1.5px solid #f2e5d4"
+        borderTop: "1.5px solid #2f3950"
       }}>
         <div style={{
           display: "flex",
@@ -503,11 +444,11 @@ function CartSidebar({
         }}>
           <span style={{
             fontWeight: 700,
-            fontSize: 20,
-            color: "#555"
+            fontSize: 19,
+            color: "#adb5bd"
           }}>Total:</span>
           <span style={{
-            color: "var(--accent)",
+            color: "var(--accent-orange)",
             fontWeight: 700,
             fontSize: 22,
           }}>{total}</span>
@@ -518,16 +459,16 @@ function CartSidebar({
           className="checkout-btn"
           style={{
             width: "100%",
-            padding: "15px 0",
-            background: "var(--primary)",
+            padding: "13px 0",
+            background: "var(--accent-orange)",
             color: "#fff",
             fontWeight: 700,
             fontSize: 18,
             border: "none",
-            borderRadius: 15,
+            borderRadius: 8,
             cursor: cart.length === 0 ? "not-allowed" : "pointer",
-            opacity: cart.length === 0 ? 0.63 : 1,
-            boxShadow: "0 1px 6px 0 rgba(255,112,67,0.13)"
+            opacity: cart.length === 0 ? 0.56 : 1,
+            boxShadow: "0 1px 6px 0 rgba(255,167,38,0.09)"
           }}
           aria-label="Proceed to checkout"
         >
@@ -538,10 +479,6 @@ function CartSidebar({
   );
 }
 
-/**
- * OrderSummaryModal: minimal summary of selected items & total.
- * On "Place Order", calls onPlaceOrder and closes.
- */
 function OrderSummaryModal({ cart, total, onPlaceOrder, onClose }) {
   // Trap focus and block scroll for accessibility
   React.useEffect(() => {
@@ -558,8 +495,7 @@ function OrderSummaryModal({ cart, total, onPlaceOrder, onClose }) {
         left: 0,
         right: 0,
         bottom: 0,
-        background: "rgba(55,71,79,0.22)",
-        zIndex: 1400,
+        zIndex: 1600,
         display: "flex",
         alignItems: "center",
         justifyContent: "center"
@@ -568,12 +504,12 @@ function OrderSummaryModal({ cart, total, onPlaceOrder, onClose }) {
         className="order-summary-modal"
         style={{
           width: "90vw",
-          maxWidth: 390,
-          background: "#fff",
+          maxWidth: 400,
+          background: "var(--bg-card)",
           borderRadius: 18,
           boxShadow: "0 6px 28px 0 rgba(55,71,79,0.24)",
-          padding: "30px 32px 22px 32px",
-          minHeight: 220,
+          padding: "33px 34px 24px 34px",
+          minHeight: 200,
           display: "flex",
           flexDirection: "column",
           alignItems: "stretch",
@@ -584,13 +520,13 @@ function OrderSummaryModal({ cart, total, onPlaceOrder, onClose }) {
           aria-label="Close order summary"
           style={{
             position: "absolute",
-            top: 12,
-            right: 20,
+            top: 10,
+            right: 16,
             background: "none",
             border: "none",
-            color: "var(--primary)",
-            fontWeight: 600,
-            fontSize: 29,
+            color: "var(--accent-orange)",
+            fontWeight: 700,
+            fontSize: 30,
             cursor: "pointer",
             padding: 0,
           }}>×</button>
@@ -598,7 +534,7 @@ function OrderSummaryModal({ cart, total, onPlaceOrder, onClose }) {
           fontWeight: 800,
           fontSize: 24,
           margin: "0 0 18px 0",
-          color: "var(--secondary)"
+          color: "var(--primary-text)"
         }}>
           Order Summary
         </h2>
@@ -613,16 +549,16 @@ function OrderSummaryModal({ cart, total, onPlaceOrder, onClose }) {
                 display: "flex",
                 justifyContent: "space-between",
                 alignItems: "center",
-                padding: "7px 0",
+                padding: "8px 0",
                 fontSize: 16,
-                borderBottom: "1px solid #f5e3dd"
+                borderBottom: "1px solid #2e3954"
               }}>
               <span>
                 {item.name} × {item.qty}
               </span>
               <span style={{
-                color: "var(--accent)",
-                fontWeight: 600
+                color: "var(--accent-orange)",
+                fontWeight: 700
               }}>${(item.price * item.qty).toFixed(2)}</span>
             </li>
           ))}
@@ -633,29 +569,28 @@ function OrderSummaryModal({ cart, total, onPlaceOrder, onClose }) {
             alignItems: "center",
             justifyContent: "space-between",
             fontWeight: 700,
-            fontSize: 19,
-            marginTop: 17,
-            borderTop: "2px solid #eee",
-            paddingTop: 12,
-            color: "#333"
+            fontSize: 18,
+            marginTop: 14,
+            borderTop: "2px solid #36415b",
+            paddingTop: 10,
+            color: "#dadada"
           }}>
           <span>Total</span>
-          <span style={{ color: "var(--accent)" }}>{total}</span>
+          <span style={{ color: "var(--accent-orange)" }}>{total}</span>
         </div>
         <button
           onClick={onPlaceOrder}
           className="placeorder-btn"
           style={{
-            marginTop: 28,
+            marginTop: 26,
             width: "100%",
-            background: "var(--primary)",
+            background: "var(--accent-orange)",
             color: "#fff",
             border: "none",
-            borderRadius: 16,
+            borderRadius: 13,
             fontWeight: 700,
             fontSize: 18,
-            padding: "13px 0",
-            boxShadow: "0 2px 8px 0 rgba(255,167,38,0.11)",
+            padding: "11px 0",
             cursor: "pointer"
           }}
           aria-label="Place order"
