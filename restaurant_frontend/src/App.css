@@ -1,104 +1,124 @@
-/* CSS Variables for Theme Management */
+/* Modern Restaurant Billing Styling */
+/* Theme colors (overridable by :root from JS) */
 :root {
-  /* Light theme colors */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --text-primary: #282c34;
-  --text-secondary: #61dafb;
-  --border-color: #e9ecef;
-  --button-bg: #007bff;
-  --button-text: #ffffff;
+  --accent: #FFA726;
+  --primary: #FF7043;
+  --secondary: #37474F;
 }
 
-[data-theme="dark"] {
-  /* Dark theme colors */
-  --bg-primary: #1a1a1a;
-  --bg-secondary: #282c34;
-  --text-primary: #ffffff;
-  --text-secondary: #61dafb;
-  --border-color: #404040;
-  --button-bg: #0056b3;
-  --button-text: #ffffff;
-}
-
+body,
 .App {
-  text-align: center;
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
+  background: #fff;
+  color: #222;
+  font-family: 'Inter', 'Segoe UI', sans-serif;
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  margin: 0;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* Appbar */
+.appbar {
+  user-select: none;
+  border-bottom: 1.7px solid #ffe4d1;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* Buttons */
+.cart-btn:focus,
+.add-btn:focus,
+.checkout-btn:focus,
+.placeorder-btn:focus {
+  outline: 2px solid var(--accent);
+}
+
+.add-btn,
+.checkout-btn,
+.placeorder-btn {
+  transition: background 0.15s;
+}
+
+.add-btn:hover,
+.checkout-btn:hover,
+.placeorder-btn:hover {
+  filter: brightness(1.08);
+  box-shadow: 0 2px 13px 0 rgba(255,167,38,0.11);
+}
+
+/* Menu grid */
+.menu-item-card {
+  transition: box-shadow 0.18s;
+}
+
+.menu-item-card:hover {
+  box-shadow: 0 4px 18px rgba(255,112,67,0.12);
+  border-color: var(--accent);
+}
+
+.menu-item-card h2 {
+  margin: 0 0 2.5px 0;
+}
+
+.menu-grid {
+  margin-top: 0;
+}
+
+@media (max-width: 700px) {
+  .main-content {
+    padding: 12px 0 !important;
+  }
+  .menu-grid {
+    gap: 18px 7px !important;
+  }
+}
+/* Cart sidebar */
+.cart-sidebar {
+  box-shadow: -8px 0 32px 0 rgba(255,112,67,0.08);
+  animation: cartslidein 0.38s cubic-bezier(.47,1.64,.41,.8);
+}
+
+@keyframes cartslidein {
+  from { right: -420px; opacity: 0;}
+  to { right: 0; opacity: 1;}
+}
+.cart-sidebar ul li:last-child { border-bottom: none; }
+
+/* Cart modal for small screens */
+@media (max-width: 600px) {
+  .cart-sidebar {
+    width: 100vw !important;
+    border-left: 0 !important;
+    border-top: 4px solid var(--primary);
+    border-radius: 0;
+    min-width: 0;
   }
 }
 
-.App-header {
-  background-color: var(--bg-secondary);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: var(--text-primary);
-  transition: background-color 0.3s ease;
-  position: relative;
+/* Modal */
+.modal-backdrop {
+  -webkit-backdrop-filter: blur(2px);
+  backdrop-filter: blur(2px);
+  transition: background 0.2s;
 }
 
-.App-link {
-  color: var(--text-secondary);
-  transition: color 0.3s ease;
+.order-summary-modal {
+  animation: orderfadein 0.13s ease;
 }
 
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: var(--button-bg);
-  color: var(--button-text);
-  border: none;
-  border-radius: 8px;
-  padding: 10px 20px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+@keyframes orderfadein {
+  from { opacity: 0; transform: translateY(36px);}
+  to   { opacity: 1; transform: translateY(0);}
 }
 
-.theme-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-  opacity: 0.9;
-}
+/* Misc */
+::-webkit-scrollbar-thumb { background: #fdf6f1;}
+::-webkit-scrollbar-track { background: #fff;}
+::-webkit-scrollbar {width:7px;}
 
-.theme-toggle:active {
-  transform: translateY(0);
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+@media (max-width: 480px) {
+  .order-summary-modal {
+    padding: 12vw 2vw 7vw 3vw !important;
+    min-height: 130px !important;
   }
 }
 
-/* Responsive design for mobile */
-@media (max-width: 768px) {
-  .theme-toggle {
-    top: 10px;
-    right: 10px;
-    padding: 8px 16px;
-    font-size: 12px;
-  }
+footer {
+  font-family: inherit;
 }
