@@ -44,6 +44,13 @@ const MENU_ITEMS = [
     price: 2.5,
     image: null
   },
+  {
+    id: 7,
+    name: "Sushi",
+    description: "Fresh assorted sushi platter with wasabi and ginger.",
+    price: 13.99,
+    image: null
+  },
 ];
 
 function IconMenu({ size = 18, color = "#fff" }) {
