@@ -173,7 +173,7 @@ function App() {
                   top: -7,
                   right: 9,
                   background: "var(--bg-dark)",
-                  color: "var(--accent-orange)",
+                  color: "var(--accent-blue)",
                   border: "2px solid #fff",
                   borderRadius: "50%",
                   fontWeight: 700,
@@ -264,13 +264,13 @@ function App() {
         }}>
         {orderPlaced && (
           <div style={{
-            background: "var(--accent-orange)",
+            background: "var(--accent-blue)",
             color: "#fff",
             padding: "15px 30px",
             borderRadius: 14,
             fontSize: 20,
             fontWeight: 700,
-            boxShadow: "0 4px 15px 0 rgba(255,167,38,0.09)"
+            boxShadow: "0 4px 15px 0 rgba(24,119,242,0.09)"
           }}>
             ✅ Order placed! Thank you.
           </div>
@@ -333,7 +333,7 @@ function CartSidebar({ open, onClose, cart, total, updateQty, removeFromCart, on
           style={{
             background: "none",
             border: "none",
-            color: "var(--accent-orange)",
+            color: "var(--accent-blue)",
             fontWeight: 700,
             fontSize: 28,
             cursor: "pointer",
@@ -379,7 +379,7 @@ function CartSidebar({ open, onClose, cart, total, updateQty, removeFromCart, on
                 }}>
                   <button
                     style={{
-                      background: "var(--accent-orange)",
+                      background: "var(--accent-blue)",
                       color: "#fff",
                       fontWeight: 600,
                       border: "none",
@@ -397,7 +397,7 @@ function CartSidebar({ open, onClose, cart, total, updateQty, removeFromCart, on
                   >−</button>
                   <button
                     style={{
-                      background: "var(--accent-orange)",
+                      background: "var(--accent-blue)",
                       color: "#fff",
                       fontWeight: 600,
                       border: "none",
@@ -418,7 +418,7 @@ function CartSidebar({ open, onClose, cart, total, updateQty, removeFromCart, on
                   style={{
                     marginLeft: 14,
                     background: "none",
-                    color: "var(--accent-orange)",
+                    color: "var(--accent-blue)",
                     fontWeight: 700,
                     fontSize: 20,
                     border: "none",
@@ -448,7 +448,7 @@ function CartSidebar({ open, onClose, cart, total, updateQty, removeFromCart, on
             color: "#adb5bd"
           }}>Total:</span>
           <span style={{
-            color: "var(--accent-orange)",
+            color: "var(--accent-blue)",
             fontWeight: 700,
             fontSize: 22,
           }}>{total}</span>
@@ -460,7 +460,7 @@ function CartSidebar({ open, onClose, cart, total, updateQty, removeFromCart, on
           style={{
             width: "100%",
             padding: "13px 0",
-            background: "var(--accent-orange)",
+            background: "var(--accent-blue)",
             color: "#fff",
             fontWeight: 700,
             fontSize: 18,
@@ -468,7 +468,7 @@ function CartSidebar({ open, onClose, cart, total, updateQty, removeFromCart, on
             borderRadius: 8,
             cursor: cart.length === 0 ? "not-allowed" : "pointer",
             opacity: cart.length === 0 ? 0.56 : 1,
-            boxShadow: "0 1px 6px 0 rgba(255,167,38,0.09)"
+            boxShadow: "0 1px 6px 0 rgba(24,119,242,0.16)"
           }}
           aria-label="Proceed to checkout"
         >
@@ -524,7 +524,7 @@ function OrderSummaryModal({ cart, total, onPlaceOrder, onClose }) {
             right: 16,
             background: "none",
             border: "none",
-            color: "var(--accent-orange)",
+            color: "var(--accent-blue)",
             fontWeight: 700,
             fontSize: 30,
             cursor: "pointer",
@@ -557,7 +557,7 @@ function OrderSummaryModal({ cart, total, onPlaceOrder, onClose }) {
                 {item.name} × {item.qty}
               </span>
               <span style={{
-                color: "var(--accent-orange)",
+                color: "var(--accent-blue)",
                 fontWeight: 700
               }}>${(item.price * item.qty).toFixed(2)}</span>
             </li>
@@ -576,7 +576,7 @@ function OrderSummaryModal({ cart, total, onPlaceOrder, onClose }) {
             color: "#dadada"
           }}>
           <span>Total</span>
-          <span style={{ color: "var(--accent-orange)" }}>{total}</span>
+          <span style={{ color: "var(--accent-blue)" }}>{total}</span>
         </div>
         <button
           onClick={onPlaceOrder}
@@ -584,7 +584,7 @@ function OrderSummaryModal({ cart, total, onPlaceOrder, onClose }) {
           style={{
             marginTop: 26,
             width: "100%",
-            background: "var(--accent-orange)",
+            background: "var(--accent-blue)",
             color: "#fff",
             border: "none",
             borderRadius: 13,

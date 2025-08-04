@@ -29,19 +29,26 @@ It correctly bundles React in production mode and optimizes the build for the be
 
 ## Customization
 
-### Colors
+### Accent colour
 
-The main brand colors are defined as CSS variables in `src/App.css`:
+The primary accent color of the application is **blue**.
+
+The main accent and brand colors are defined as CSS variables in `src/App.css`:
 
 ```css
 :root {
-  --kavia-orange: #E87A41;
-  --kavia-dark: #1A1A1A;
-  --text-color: #ffffff;
-  --text-secondary: rgba(255, 255, 255, 0.7);
-  --border-color: rgba(255, 255, 255, 0.1);
+  --accent-blue: #1877f2;     /* Main accent (Blue) */
+  --bg-dark: #232e3a;
+  --bg-card: #283342;
+  --bg-placeholder: #3b4757;
+  --primary-text: #fff;
+  --secondary-text: #adb5bd;
+  /* ...others... */
 }
 ```
+All UI elements (e.g., buttons, prices, highlights, borders) that use the accent colour reference `var(--accent-blue)`.
+
+> **Note**: If you add new UI components in the future, use the `var(--accent-blue)` CSS variable for any accent/primary colour styling to stay consistent.
 
 ### Components
 
